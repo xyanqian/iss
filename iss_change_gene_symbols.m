@@ -1,4 +1,4 @@
-function ChangeGeneSymbols(MarkerSize)
+function ChangeGeneSymbols(MarkerSize, LineWidth)
 % ChangeGeneSymbols(MarkerSize);
 %
 % changes gene symbols so in situ plots look nice. 
@@ -9,6 +9,10 @@ function ChangeGeneSymbols(MarkerSize)
  
 if nargin<1
     MarkerSize = 6;
+end
+
+if nargin<2
+    LineWidth = 0.5;
 end
 
 
@@ -195,9 +199,9 @@ for i=1:n
 
         if MarkerSize>0
 			if strcmp(gc(l).Type, 'line')
-				set(h(j), 'MarkerSize', MarkerSize);
+				set(h(j), 'MarkerSize', MarkerSize, 'linewidth', LineWidth);
 			elseif strcmp(gc(l).Type, 'scatter')
-				set(h(j), 'SizeData', MarkerSize);
+				set(h(j), 'SizeData', MarkerSize, 'linewidth', LineWidth);
 			end
         end
         s(j) = i;

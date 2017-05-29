@@ -29,8 +29,9 @@ for t=Tiles(:)'
     [y,x] = ind2sub([nY nX], t);
     if mod(t,10)==0; fprintf('Loading tile %d\n', t); end
     RefTiles(:,:,t) = imread(o.TileFiles{rr,y,x}, o.AnchorChannel);
-    oNoGraphics = o; oNoGraphics.Graphics=0;
-    RefSpots{t} = iss_detect_spots(RefTiles(:,:,t), oNoGraphics);
+%     oNoGraphics = o; oNoGraphics.Graphics=0;
+%     RefSpots{t} = iss_detect_spots(RefTiles(:,:,t), oNoGraphics);
+%     RefSpots{t} = iss_detect_spots(RefTiles(:,:,t), o);
 end
 
 %% first we stitch the tiles on the reference round
@@ -120,7 +121,6 @@ o.RefPos = bsxfun(@minus,TileOffset1, nanmin(TileOffset1))+1;
 save o1 o
 
 
-
 %% now we align on all other rounds.
 
 % linear shift
@@ -139,7 +139,7 @@ for r=1:o.nRounds+o.nExtraRounds
         end
  
         MyTile = imread(o.TileFiles{r,y,x},o.AnchorChannel);
-        MySpots = iss_detect_spots(MyTile, oNoGraphics);
+%         MySpots = iss_detect_spots(MyTile, oNoGraphics);
 
         % first align to same tile in reference round
         [shift, cc] = ImRegFft(MyTile, RefTiles(:,:,y,x), 'c', o.CorrThresh, o.MinSize);
@@ -198,6 +198,7 @@ end
 
 MaxTileLoc = max(o.RefPos);
 BigDapiIm = zeros(ceil((MaxTileLoc + o.TileSz)/o.DapiScaleFac), 'uint16');
+BigAnchorIm = zeros(ceil((MaxTileLoc + o.TileSz)), 'uint16');
 
 for t=Tiles
     if ~isfinite(o.RefPos(t,1)); continue; end
@@ -205,6 +206,11 @@ for t=Tiles
     BigDapiIm(floor(o.RefPos(t,1)/o.DapiScaleFac)+(1:o.TileSz/o.DapiScaleFac), ...
         floor(o.RefPos(t,2)/o.DapiScaleFac)+[1:o.TileSz/o.DapiScaleFac]) ...
         = imresize(LocalDapiIm, 1/o.DapiScaleFac);
+    LocalAnchorIm = imread(o.TileFiles{o.ReferenceRound,t}, o.AnchorChannel);
+    BigAnchorIm(floor(o.RefPos(t,1))+(1:o.TileSz), ...
+        floor(o.RefPos(t,2))+(1:o.TileSz)) ...
+        = LocalAnchorIm;
 end
 
-imwrite(BigDapiIm, [o.OutputDirectory '\background_image.tif']);
+imwrite(BigDapiIm, fullfile(o.OutputDirectory, 'background_image.tif'));
+imwrite(BigAnchorIm, fullfile(o.OutputDirectory, 'anchor_image.tif'));

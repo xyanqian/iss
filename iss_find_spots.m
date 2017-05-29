@@ -154,7 +154,8 @@ for t=1:nTiles
             end
             if o.PointCloud
                 % find spots for base b on tile t
-                BaseYX = iss_detect_spots(BaseIm,o);
+                oNoGraphics = o; oNoGraphics.Graphics=0;
+                BaseYX = iss_detect_spots(BaseIm,oNoGraphics);
                 % now loop over all potential home tiles for this one
                 MyRefTiles = unique(ndLocalTile(ndRoundTile(:,r)==t));
                 for t2 = MyRefTiles(:)'
@@ -310,4 +311,4 @@ end
 
 
 %%
-save Spots GoodGlobalYX GoodSpotColors GoodIsolated
+save Spots GoodGlobalYX GoodSpotColors GoodIsolated Good

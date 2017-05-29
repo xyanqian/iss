@@ -15,7 +15,7 @@ SpotColors = bsxfun(@rdivide, SpotColors0, prctile(SpotColors0, o.SpotNorm(1), o
 % now we cluster the intensity vectors to estimate the Bleed Matrix
 BleedMatrix = zeros(o.nBP,o.nBP,o.nRounds); % (Measured, Real, Round)
 for r =1:o.nRounds
-    m = sq(SpotColors(IsolatedSpots,:,r)); % data: nCodes by nBases
+    m = squeeze(SpotColors(IsolatedSpots,:,r)); % data: nCodes by nBases
     
     [Cluster, v, s2] = ScaledKMeans(m, eye(4));
     for i=1:4

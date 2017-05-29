@@ -71,7 +71,7 @@ if o.Graphics==3
     plot(xPeak(~Isolated), yPeak(~Isolated), 'wx');
     legend('Isolated', 'Not isolated');
     drawnow
-    pause
+%     pause
     
 %      input('Press return', 's');
 end

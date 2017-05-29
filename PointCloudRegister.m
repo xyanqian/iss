@@ -36,7 +36,7 @@ k0 = KDTreeSearcher(y0);
 
 % find well isolated points as those whose second neighbor is far
 [~, d2] = k0.knnsearch(y0, 'k', 2);
-if isfinite(DistScale)
+if isfinite(DistScale) && size(y0,1) > 1 
     y = y0(d2(:,2)>DistScale*2,:);
 else
     y=y0;
@@ -59,14 +59,14 @@ for i=1:MaxIter
         figure(2938764);
         fprintf('Iteration %d: %d matches, mean error %f\n', i, sum(UseMe), Error);
         clf; hold on
-         plot(y(:,1), y(:,2), 'r.');
-         plot(xM(:,1), xM(:,2), 'g.');
-        plot([xM(UseMe,1) y(MyNeighb,1)]', [xM(UseMe,2) y(MyNeighb,2)]', 'k-');
-        
-        
+         plot(y(:,2), y(:,1), 'g+');
+         plot(xM(:,2), xM(:,1), 'r+');
+        plot([xM(UseMe,2) y(MyNeighb,2)]', [xM(UseMe,1) y(MyNeighb,1)]', 'w-', 'linewidth', 1);
+
         drawnow;
-        pause
+%         pause
     end
+    
     if isequal(LastNeighbor, Neighbor); break; end
 end
 

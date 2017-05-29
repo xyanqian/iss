@@ -32,8 +32,12 @@ else
     BackgroundImage = imread([o.OutputDirectory '\background_image.tif']);
 end
 
-imagesc(BackgroundImage);
-colormap(bone);
+% imagesc(BackgroundImage);
+% colormap(bone);
+imshow(BackgroundImage, []);
+hold on;
+set(gca, 'YDir', 'normal');
+axis on
 
 uGenes = unique(Genes);
 

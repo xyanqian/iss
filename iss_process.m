@@ -43,8 +43,8 @@ if o.Graphics
 end
 
 %% save it
-savefig([o.OutputDirectory '\iss.fig']);
+savefig(fullfile(o.OutputDirectory, 'iss.fig'));
 
 % and save data
-save([o.OutputDirectory '\iss.mat'], 'FinalYX', 'FinalGenes', 'FinalMaxScore');
+save(fullfile(o.OutputDirectory, 'iss.mat'), 'FinalYX', 'FinalGenes', 'FinalMaxScore');
 
